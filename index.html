@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101b35">
+  <meta name="description" content="SpendWise helps you understand your money, track spending and stay on budget.">
+  <title>SpendWise — Personal Finance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="SpendWise home"><span class="brand-mark">S</span><span>spend<span class="brand-light">wise</span></span></a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-list" aria-label="Main navigation">
+        <a class="nav-link active" href="#overview"><span class="nav-icon">▦</span> Overview</a>
+        <a class="nav-link" href="#transactions"><span class="nav-icon">↕</span> Transactions</a>
+        <a class="nav-link" href="#budgets"><span class="nav-icon">◷</span> Budgets</a>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card"><div class="help-icon">✦</div><strong>Make every shilling count.</strong><p>Small steps today. Better money habits tomorrow.</p></div>
+        <div class="profile"><div class="avatar">Y</div><div><strong>Your account</strong><small>Personal workspace</small></div><span class="dots">•••</span></div>
+      </div>
+    </aside>
+    <main class="main-content" id="overview">
+      <header class="topbar"><div><div class="eyebrow">YOUR MONEY, IN FOCUS</div><h1>Good afternoon <span>✦</span></h1><p class="muted">Here’s what’s happening with your money.</p></div><div class="top-actions"><span class="date-pill" id="today-label"></span><button class="primary-btn" id="open-modal"><span>＋</span> Add transaction</button></div></header>
+      <section class="summary-grid" aria-label="Financial summary">
+        <article class="summary-card balance-card"><div class="card-top"><span>Total balance</span><span class="metric-icon">◈</span></div><div class="amount" id="balance">KSh 0.00</div><div class="card-foot"><span class="trend positive">↗ Live overview</span><span class="subtle">Income minus expenses</span></div><div class="balance-decoration"></div></article>
+        <article class="summary-card"><div class="card-top"><span>Total income</span><span class="metric-icon income-icon">↙</span></div><div class="amount dark-amount" id="income">KSh 0.00</div><div class="card-foot"><span class="trend positive">＋ Money in</span><span class="subtle">All recorded income</span></div></article>
+        <article class="summary-card"><div class="card-top"><span>Total expenses</span><span class="metric-icon expense-icon">↗</span></div><div class="amount dark-amount" id="expenses">KSh 0.00</div><div class="card-foot"><span class="trend negative">− Money out</span><span class="subtle">All recorded expenses</span></div></article>
+        <article class="summary-card"><div class="card-top"><span>Monthly budget</span><span class="metric-icon budget-icon">◎</span></div><div class="amount dark-amount" id="budget-total">KSh 0.00</div><div class="budget-progress"><span id="budget-progress"></span></div><div class="card-foot"><span class="subtle" id="budget-caption">Set a budget to get started</span></div></article>
+      </section>
+      <section class="content-grid">
+        <article class="panel spending-panel"><div class="panel-heading"><div><h2>Spending overview</h2><p class="muted">Your income and expenses at a glance</p></div><span class="period-tag">All time</span></div><div class="chart-wrap"><canvas id="spending-chart" aria-label="Income and expense chart"></canvas><div id="chart-fallback" class="chart-fallback">Add transactions to see your spending chart.</div></div></article>
+        <article class="panel category-panel"><div class="panel-heading"><div><h2>Where it goes</h2><p class="muted">Expense breakdown by category</p></div></div><div id="category-list" class="category-list"><div class="empty-state">Your categories will appear here.</div></div></article>
+      </section>
+      <section class="panel transactions-panel" id="transactions"><div class="panel-heading transaction-heading"><div><h2>Recent transactions</h2><p class="muted">A closer look at your latest activity</p></div><button class="text-btn" id="view-all">View all <span>→</span></button></div><div class="table-scroll"><table><thead><tr><th>TRANSACTION</th><th>CATEGORY</th><th>DATE</th><th>AMOUNT</th><th></th></tr></thead><tbody id="transaction-rows"><tr><td colspan="5" class="empty-table">No transactions yet. Add your first one to get started.</td></tr></tbody></table></div></section>
+      <section class="panel budgets-panel" id="budgets"><div class="panel-heading"><div><h2>Budget planner</h2><p class="muted">Keep your spending goals within reach</p></div><button class="outline-btn" id="edit-budget">＋ Set monthly budget</button></div><div id="budget-details" class="budget-details"><div class="empty-state">Create a monthly budget to start tracking your progress.</div></div></section>
+      <footer>SpendWise <span>·</span> Spend intentionally. Live confidently.</footer>
+    </main>
+  </div>
+  <div class="modal-backdrop" id="transaction-modal" aria-hidden="true"><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><div class="modal-heading"><div><div class="eyebrow">KEEP YOUR RECORDS FRESH</div><h2 id="modal-title">Add transaction</h2></div><button class="close-btn" id="close-modal" aria-label="Close">×</button></div><form id="transaction-form"><label>Description<input name="description" maxlength="60" placeholder="e.g. Grocery shopping" required></label><div class="form-row"><label>Amount (KSh)<input name="amount" type="number" min="0.01" step="0.01" placeholder="0.00" required></label><label>Type<select name="type"><option value="expense">Expense</option><option value="income">Income</option></select></label></div><div class="form-row"><label>Category<select name="category"><option>Food</option><option>Transport</option><option>Housing</option><option>Shopping</option><option>Health</option><option>Entertainment</option><option>Utilities</option><option>Salary</option><option>Freelance</option><option>Other</option></select></label><label>Date<input name="date" type="date" id="transaction-date" required></label></div><p class="form-error" id="form-error" role="alert"></p><button class="primary-btn full-btn" type="submit">Save transaction</button></form></section></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
